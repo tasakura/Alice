@@ -201,4 +201,11 @@ public class Alice extends Sprite {
 	public void setForceJump(boolean forceJump) {
 		this.forceJump = forceJump;
 	}
+	
+	
+	/*
+	 * テスト
+	 * 
+	 * 
+	 * */
 }
