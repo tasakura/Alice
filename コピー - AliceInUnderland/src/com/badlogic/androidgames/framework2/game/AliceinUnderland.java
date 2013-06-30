@@ -13,4 +13,8 @@ public class AliceinUnderland extends AndroidGame{
 		return new LoadingScreen(this);
 	}
 
+	/*
+	 *	7/1テスト
+	 * */
+
 }
