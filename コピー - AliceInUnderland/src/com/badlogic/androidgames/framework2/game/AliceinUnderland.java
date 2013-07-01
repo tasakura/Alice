@@ -14,7 +14,7 @@ public class AliceinUnderland extends AndroidGame{
 	}
 
 	/*
-	 *	7/1テスト
+	 *	7/2テスト
 	 * */
 
 }
