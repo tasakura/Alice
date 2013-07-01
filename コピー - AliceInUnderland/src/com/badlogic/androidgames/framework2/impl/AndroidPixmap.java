@@ -28,7 +28,7 @@ public class AndroidPixmap implements Pixmap{
 	}
 
 	public void dispose() {
-		bitmap.recycle();		//bitmap���J��
+		bitmap.recycle();		//bitmap・ｽ・ｽ・ｽJ・ｽ・ｽ
 	}
 
 }

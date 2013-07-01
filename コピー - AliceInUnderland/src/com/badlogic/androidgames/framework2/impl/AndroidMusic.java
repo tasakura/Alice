@@ -19,7 +19,7 @@ public class AndroidMusic implements Music, OnCompletionListener{
 			mediaPlayer.setDataSource(assetDescriptor.getFileDescriptor(),
 									  assetDescriptor.getStartOffset(),
 									  assetDescriptor.getLength());
-			mediaPlayer.prepare();	//����
+			mediaPlayer.prepare();	//・ｽ・ｽ・ｽ・ｽ
 			isPrepared = true;
 			mediaPlayer.setOnCompletionListener(this);
 		}catch (Exception e) {
@@ -27,7 +27,7 @@ public class AndroidMusic implements Music, OnCompletionListener{
 		}
 	}
 	
-	public void onCompletion(MediaPlayer mp) {	//�Đ����I��������̃C�x���g
+	public void onCompletion(MediaPlayer mp) {	//・ｽﾄ撰ｿｽ・ｽ・ｽ・ｽI・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾌイ・ｽx・ｽ・ｽ・ｽg
 		synchronized (this) {
 			isPrepared = false;
 		}
@@ -38,7 +38,7 @@ public class AndroidMusic implements Music, OnCompletionListener{
 			return ;
 		
 		try {
-			synchronized (this) {			//�X���b�h�̔r������
+			synchronized (this) {			//・ｽX・ｽ・ｽ・ｽb・ｽh・ｽﾌ排・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
 				if(!isPrepared)
 					mediaPlayer.prepare();
 				mediaPlayer.start();
@@ -57,7 +57,7 @@ public class AndroidMusic implements Music, OnCompletionListener{
 		}
 	}
 
-	public void pause() {					//�Đ������ǂ����`�F�b�N���A�Đ����Ȃ�ꎞ��~
+	public void pause() {					//・ｽﾄ撰ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽﾇゑｿｽ・ｽ・ｽ・ｽ`・ｽF・ｽb・ｽN・ｽ・ｽ・ｽA・ｽﾄ撰ｿｽ・ｽ・ｽ・ｽﾈゑｿｽ齊橸ｿｽ・ｽ~
 		if(mediaPlayer.isPlaying())
 			mediaPlayer.pause();
 	}
@@ -70,22 +70,22 @@ public class AndroidMusic implements Music, OnCompletionListener{
 		mediaPlayer.setVolume(volume, volume);
 	}
 
-	public boolean isPlaying() {			//�Đ�
+	public boolean isPlaying() {			//・ｽﾄ撰ｿｽ
 		return mediaPlayer.isPlaying();
 	}
 
-	public boolean isStopped() {			//��~���Ă��邩�Ԃ�
+	public boolean isStopped() {			//・ｽ・ｽ~・ｽ・ｽ・ｽﾄゑｿｽ・ｽ驍ｩ・ｽﾔゑｿｽ
 		return !isPrepared;
 	}
 
-	public boolean isLooping() {			//���[�v
+	public boolean isLooping() {			//・ｽ・ｽ・ｽ[・ｽv
 		return mediaPlayer.isLooping();
 	}
 
-	public void dispose() {					//�p��
+	public void dispose() {					//・ｽp・ｽ・ｽ
 		if(mediaPlayer.isPlaying())
 			mediaPlayer.stop();
-		mediaPlayer.release();		//�J��
+		mediaPlayer.release();		//・ｽJ・ｽ・ｽ
 	}
 
 }
