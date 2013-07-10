@@ -17,9 +17,6 @@ import android.widget.FrameLayout;
 
 public class MainMenuScreen extends Screen {
 
-	private int WIDTH = 800;
-	private int HEIGHT = 480;
-	
 	public MainMenuScreen(Game game) {
 		super(game);
 	}
