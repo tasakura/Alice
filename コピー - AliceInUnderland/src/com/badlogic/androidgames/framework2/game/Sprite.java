@@ -4,9 +4,7 @@ package com.badlogic.androidgames.framework2.game;
 import com.badlogic.androidgames.framework2.Graphics;
 import com.badlogic.androidgames.framework2.Pixmap;
 
-import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.util.Log;
 
 public abstract class Sprite {
 	protected double x;
