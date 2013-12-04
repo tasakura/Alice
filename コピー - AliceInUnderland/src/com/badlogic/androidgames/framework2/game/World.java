@@ -31,7 +31,6 @@ public class World {
 	private int player_x = 0;
 	private int player_y = 0;
 	private boolean flag_gameover;
-	private int Nowstage;
 
 	private int ROW;
 	private int COL;
@@ -39,7 +38,6 @@ public class World {
 	private int height;
 	private LinkedList sprites;
 	private boolean timerFlag;
-	private char point;
 
 	private char map[][];
 

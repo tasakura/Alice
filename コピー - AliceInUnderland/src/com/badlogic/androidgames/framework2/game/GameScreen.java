@@ -29,7 +29,6 @@ public class GameScreen extends Screen {
 	private int touch_direction = 0; // 1=right 2=left
 	private int touch_jump = 0;
 	private int stage;
-	private char point;
 	
 	private Alice alice;
 	private World world;
@@ -40,7 +39,6 @@ public class GameScreen extends Screen {
 		world = new World(stage, point);
 		alice = new Alice(world.getPlayer_x(), world.getPlayer_y(),
 				Assets.alice_1, world);
-		this.point = point;
 	}
 
 	@Override
@@ -103,10 +101,53 @@ public class GameScreen extends Screen {
 
 			}
 		}
-		world.update(deltaTime);
-	}
 
-	private void updatePaused(List<TouchEvent> touchEvents) {
+		
+		
+		// Spriteとの当たり判定
+		LinkedList sprites = world.getSprites();
+		Iterator iterator = sprites.iterator(); // Iterator=コレクション内の要素を順番に取り出す方法
+		while (iterator.hasNext()) { // iteratorの中で次の要素がある限りtrue
+			Sprite sprite = (Sprite) iterator.next();
+			sprite.update();
+			if (alice.isCollision(sprite)) {
+				if (sprite instanceof GoolDoor) {
+					state = GameState.Clear;
+					break;
+				} else if (sprite instanceof Door) {
+					Door door = (Door) sprite;
+					int Nextstage = door.getNextstage();
+					char point = door.getNumber();
+					setStage(Nextstage, point);
+				} else if (sprite instanceof Tramp) {
+					Tramp slime = (Tramp) sprite;
+					// 上から踏まれてたら
+					if ((int) alice.getY() < (int) slime.getY() - 15) {
+						// スライムは消える
+						sprites.remove(slime);
+						// 踏むとプレイヤーは再ジャンプ
+						alice.setForceJump(true);
+						alice.jump();
+						break;
+					} else {
+						state = GameState.GameOver;
+					}
+				} else if (sprite instanceof TeaCap) {
+					// アイテムは消える
+					TeaCap teacap = (TeaCap) sprite;
+					sprites.remove(teacap);
+					teacap.use(alice);
+					break;
+				} else if (sprite instanceof Clock) {
+					Clock clock = (Clock) sprite;
+					sprites.remove(clock);
+					clock.use(world);
+					break;
+				}
+			}
+		}
+		world.update(deltaTime);
+		alice.update();
 	}
 
 	private void updateGameOver(List<TouchEvent> touchEvents) {
@@ -164,8 +205,7 @@ public class GameScreen extends Screen {
 		if (alice.getY() > world.getHeight() || world.isWorld_end()) {
 			state = GameState.GameOver;
 		}
-
-		alice.update();
+		
 		// マップの端ではスクロールしないようにする
 		// x方向のオフセットを計算
 		int offsetX = WIDTH / 2 - (int) alice.getX();
@@ -177,48 +217,13 @@ public class GameScreen extends Screen {
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, HEIGHT - world.getHeight());
 
+		
 		// Spriteとの当たり判定
 		LinkedList sprites = world.getSprites();
 		Iterator iterator = sprites.iterator(); // Iterator=コレクション内の要素を順番に取り出す方法
 		while (iterator.hasNext()) { // iteratorの中で次の要素がある限りtrue
 			Sprite sprite = (Sprite) iterator.next();
 			sprite.draw(g, offsetX, offsetY, deltaTime);
-			sprite.update();
-			if (alice.isCollision(sprite)) {
-				if (sprite instanceof GoolDoor) {
-					state = GameState.Clear;
-					break;
-				} else if (sprite instanceof Door) {
-					Door door = (Door) sprite;
-					int Nextstage = door.getNextstage();
-					char point = door.getNumber();
-					setStage(Nextstage, point);
-				} else if (sprite instanceof Tramp) {
-					Tramp slime = (Tramp) sprite;
-					// 上から踏まれてたら
-					if ((int) alice.getY() < (int) slime.getY() - 15) {
-						// スライムは消える
-						sprites.remove(slime);
-						// 踏むとプレイヤーは再ジャンプ
-						alice.setForceJump(true);
-						alice.jump();
-						break;
-					} else {
-						state = GameState.GameOver;
-					}
-				} else if (sprite instanceof TeaCap) {
-					// アイテムは消える
-					TeaCap teacap = (TeaCap) sprite;
-					sprites.remove(teacap);
-					teacap.use(alice);
-					break;
-				} else if (sprite instanceof Clock) {
-					Clock clock = (Clock) sprite;
-					sprites.remove(clock);
-					clock.use(world);
-					break;
-				}
-			}
 		}
 		alice.draw(g, offsetX, offsetY, deltaTime);
 		world.draw(g, offsetX, offsetY);
@@ -247,8 +252,13 @@ public class GameScreen extends Screen {
 		Paint paint = new Paint();
 		paint.setColor(Color.argb(127, 200, 200, 200));
 		paint.setStyle(Paint.Style.FILL);
-		g.drawController(cx, cy, cr, paint, Color.WHITE, Color.YELLOW,
-				touch_direction);
+//		g.drawController(cx, cy, cr, paint, Color.WHITE, Color.YELLOW,
+//				touch_direction);
+		g.drawCircle(cx, cy, cr, paint);
+		paint.setColor(Color.BLACK);
+		paint.setStyle(Paint.Style.FILL);
+		cr = 30;
+		g.drawCircle(cx+(cr/2)-15, cy+(cr/2)-15, 30, paint);
 		if (touch_jump == 1) {
 			paint.setColor(Color.argb(127, 255, 255, 0));
 		} else {

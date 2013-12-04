@@ -9,8 +9,8 @@ import android.util.Log;
 
 public class Alice extends Sprite {
 
-	private static final int JUMP_SPEED = 20; // ジャンプ力
-	private static final float TICK_INITIAL = 0.3f;
+	private static final int JUMP_SPEED = 15; // ジャンプ力
+	private static final float TICK_INITIAL = 0.15f;
 	private static float tick = TICK_INITIAL; // 更新速度
 
 	private double vx;
@@ -201,11 +201,4 @@ public class Alice extends Sprite {
 	public void setForceJump(boolean forceJump) {
 		this.forceJump = forceJump;
 	}
-	
-	
-	/*
-	 * テスト
-	 * 
-	 * 
-	 * */
 }

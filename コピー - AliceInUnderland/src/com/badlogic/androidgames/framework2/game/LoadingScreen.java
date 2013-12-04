@@ -17,10 +17,12 @@ public class LoadingScreen extends Screen {
 		Assets.back_start = g.newPixmap("back_start.png", PixmapFormat.RGB565);
 		Assets.back_play = g.newPixmap("back_play.png", PixmapFormat.RGB565);
 		Assets.block = g.newPixmap("block.png", PixmapFormat.ARGB4444);
+		/* 以下入力させる */
 		Assets.alice_1 = g.newPixmap("alice_1.png", PixmapFormat.ARGB4444);
 		Assets.alice_2 = g.newPixmap("alice_2.png", PixmapFormat.ARGB4444);
 		Assets.alice_3 = g.newPixmap("alice_3.png", PixmapFormat.ARGB4444);
 		Assets.alice_4 = g.newPixmap("alice_4.png", PixmapFormat.ARGB4444);
+		/* ここまで */
 		Assets.tramp_1 = g.newPixmap("tramp_1.png", PixmapFormat.ARGB4444);
 		Assets.tramp_2 = g.newPixmap("tramp_2.png", PixmapFormat.ARGB4444);
 		Assets.tramp_3 = g.newPixmap("tramp_3.png", PixmapFormat.ARGB4444);
