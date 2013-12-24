@@ -25,7 +25,7 @@ public class Clock extends Sprite {
 	 *アイテムを使う
 	 */
 	public void use(World world) {
-		int plus = 5;
+		int plus = 10;
 		world.plus_timelimit(plus);
 	}
 

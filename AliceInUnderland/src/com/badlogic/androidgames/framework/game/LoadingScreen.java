@@ -19,6 +19,7 @@ public class LoadingScreen extends Screen {
 		Assets.alices = g.newPixmap("alice.png", PixmapFormat.ARGB4444);
 		Assets.block01 = g.newPixmap("block01.png", PixmapFormat.ARGB4444);
 		Assets.block02 = g.newPixmap("block02.png", PixmapFormat.ARGB4444);
+		Assets.block03 = g.newPixmap("block03.png", PixmapFormat.ARGB4444);
 		Assets.tramp_Blue = g.newPixmap("tramp_Blue.png", PixmapFormat.ARGB4444);
 		Assets.tramp_Red = g.newPixmap("tramp_Red.png", PixmapFormat.ARGB4444);
 		Assets.tea = g.newPixmap("tea.png", PixmapFormat.ARGB4444);

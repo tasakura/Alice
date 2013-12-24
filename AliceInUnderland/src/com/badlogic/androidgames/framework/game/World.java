@@ -82,7 +82,7 @@ public class World {
 			map = new int[ROW][COL];
 			for (int i = 0; i < ROW; i++) {
 				line = br.readLine();
-				String list[] = line.split(" ");
+				String list[] = line.split(",");
 				for (int j = 0; j < COL; j++) {
 					map[i][j] = Integer.parseInt(list[j]);
 					switch (map[i][j]) {
@@ -192,6 +192,10 @@ public class World {
 					g.drawPixmap(Assets.block02, tilesToPixels(j) + offsetX,
 							tilesToPixels(i) + offsetY);
 					break;
+				case 38:
+					g.drawPixmap(Assets.block03, tilesToPixels(j) + offsetX,
+							tilesToPixels(i) + offsetY);
+					break;
 				}
 			}
 		}
@@ -242,7 +246,7 @@ public class World {
 					return null;
 
 				// ブロックがあったら衝突
-				if (map[y][x] == 32 || map[y][x] == 33)
+				if (map[y][x] == 32 || map[y][x] == 33|| map[y][x] == 38)
 					return new Point(x, y);
 				if (sprite instanceof Tramp) {
 					tramp_swich = true;

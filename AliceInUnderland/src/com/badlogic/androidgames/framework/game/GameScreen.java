@@ -34,11 +34,11 @@ public class GameScreen extends Screen {
 
 	public GameScreen(Game game) {
 		super(game);
-		this.stage = 1;
+		this.stage = 5;
 		world = new World(game, stage);
 		alice = new Alice(world.getPlayer_x(), world.getPlayer_y(),
 				Assets.alices, world);
-//		alice.setWorldHeight(world.getHeight());
+		// alice.setWorldHeight(world.getHeight());
 	}
 
 	@Override
@@ -58,7 +58,6 @@ public class GameScreen extends Screen {
 	private void updateReady(List<TouchEvent> touchEvents, float deltaTime) {
 		float WAITTIME = 2.0f;
 		tickTime += deltaTime;
-		Log.d("tickTIme", tickTime + "");
 		if (tickTime > WAITTIME) {
 			state = GameState.Running;
 			tickTime = 0;
@@ -93,8 +92,10 @@ public class GameScreen extends Screen {
 				}
 				if (isBounds(event, 700 - 60, 350 - 60, 120, 120)) {
 					// (Jumpボタン処理)
-					alice.jump();
-					touch_jump = 1;
+					if (touch_jump == 0) {
+						alice.jump();
+						touch_jump = 1;
+					}
 				}
 				break;
 			case MotionEvent.ACTION_UP:
@@ -122,8 +123,10 @@ public class GameScreen extends Screen {
 					Door door = (Door) sprite;
 					int Nextstage = door.getNextstage();
 					world = new World(game, Nextstage);
-					alice.setWorld(world, world.getPlayer_x(), world.getPlayer_y());
+					alice.setWorld(world, world.getPlayer_x(),
+							world.getPlayer_y());
 					alice.setAlicePotison();
+					stage = Nextstage;
 					state = GameState.Ready;
 				} else if (sprite instanceof Tramp) {
 					Tramp tramp = (Tramp) sprite;
@@ -135,10 +138,10 @@ public class GameScreen extends Screen {
 					if ((int) alice.getY() < (int) tramp.getY() - 15) {
 						if (tramp.getState() == 0)
 							tramp.setState(1);
-						break;
 						// 踏むとプレイヤーは再ジャンプ
-						// alice.setForceJump(true);
-						// alice.jump();
+						 alice.setForceJump(true);
+						 alice.jump_half();
+						 break;
 					} else {
 						if (tramp.getState() == 0) {
 							if (alice.getState() == 0)
@@ -166,10 +169,11 @@ public class GameScreen extends Screen {
 
 		// ゲームオーバー判定
 		if (alice.getY() > world.getHeight()) {
-			if (alice.getStock() > 0) {
+			if (alice.getStock() > 1) {
 				world = new World(game, stage);
 				alice.setWorld(world, world.getPlayer_x(), world.getPlayer_y());
 				alice.setAlicePotison();
+				alice.minusStock();
 				state = GameState.Ready;
 				tickTime = 0;
 			} else {

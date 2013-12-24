@@ -12,6 +12,7 @@ public class Assets {
 	public static Pixmap back_play;
 	public static Pixmap block01;
 	public static Pixmap block02;
+	public static Pixmap block03;
 	public static Pixmap boms;
 	public static Pixmap limit;
 	public static Pixmap numbers;

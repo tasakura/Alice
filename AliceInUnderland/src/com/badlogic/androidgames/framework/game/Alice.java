@@ -11,7 +11,7 @@ import android.util.Log;
 public class Alice extends Sprite {
 
 	private int state = 0; // 0=生存,1=アニメーション中,2=死亡
-	private static final int JUMP_SPEED = 17; // ジャンプ力
+	private static final int JUMP_SPEED = 19; // ジャンプ力
 	private static final float TICK_INITIAL = 0.3f;
 	private static float tick = TICK_INITIAL; // 更新速度
 
@@ -56,6 +56,7 @@ public class Alice extends Sprite {
 		this.x = point_start_x = x;
 		this.y = point_start_y = y;
 		WorldHeight = world.getHeight();
+		Cancel();
 	}
 
 	public double getX() {
@@ -138,6 +139,15 @@ public class Alice extends Sprite {
 			forceJump = false;
 		}
 	}
+	
+	public void jump_half() {
+		if (onGround || forceJump) {
+			// 上向きに速度を加える
+			vy = -JUMP_SPEED/2;
+			onGround = false;
+			forceJump = false;
+		}
+	}
 
 	public void update() {
 		if (state == 0) {
@@ -201,10 +211,9 @@ public class Alice extends Sprite {
 				if (anim_max_y > y)
 					anim_switch = true;
 			} else {
-				y += 8;
+				y += 17;
 				if (y > WorldHeight) {
 					state = 2;
-					stock--;
 					anim_switch = false;
 				}
 
