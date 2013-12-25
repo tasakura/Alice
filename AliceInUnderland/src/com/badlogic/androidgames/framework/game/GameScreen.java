@@ -34,7 +34,7 @@ public class GameScreen extends Screen {
 
 	public GameScreen(Game game) {
 		super(game);
-		this.stage = 5;
+		this.stage = 10;
 		world = new World(game, stage);
 		alice = new Alice(world.getPlayer_x(), world.getPlayer_y(),
 				Assets.alices, world);

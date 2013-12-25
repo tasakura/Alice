@@ -128,6 +128,7 @@ public class Alice extends Sprite {
 	// 停止時
 	public void Cancel() {
 		vx = 0;
+		vy = 0;
 	}
 
 	// ジャンプ
