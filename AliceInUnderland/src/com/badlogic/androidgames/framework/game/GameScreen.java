@@ -34,7 +34,7 @@ public class GameScreen extends Screen {
 
 	public GameScreen(Game game) {
 		super(game);
-		this.stage = 10;
+		this.stage = 1;
 		world = new World(game, stage);
 		alice = new Alice(world.getPlayer_x(), world.getPlayer_y(),
 				Assets.alices, world);
@@ -159,6 +159,11 @@ public class GameScreen extends Screen {
 					Clock clock = (Clock) sprite;
 					sprites.remove(clock);
 					clock.use(world);
+					break;
+				} else if (sprite instanceof Block) {
+					Block block = (Block) sprite;
+//					alice.CollisionJudge(block);
+//					alice.setY(block.y-alice.getHeight());
 					break;
 				}
 			}

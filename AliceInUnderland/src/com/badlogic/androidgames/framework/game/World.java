@@ -48,8 +48,7 @@ public class World {
 		Settings.mapload(game.getFileIO(), "map" + stage + ".txt");
 		Settings.load(game.getFileIO());
 		load(stage);
-		width = COL * BLOCK_SIZE;
-		height = ROW * BLOCK_SIZE;
+		Log.d("", width+"+"+height);
 		tickTime = 0;
 		world_end = false;
 		timerFlag = true;
@@ -78,6 +77,8 @@ public class World {
 			COL = Integer.parseInt(line);
 			line = br.readLine();
 			timelimit = Integer.parseInt(line);
+			width = COL * BLOCK_SIZE;
+			height = ROW * BLOCK_SIZE;
 			// マップを作成
 			map = new int[ROW][COL];
 			for (int i = 0; i < ROW; i++) {
@@ -109,6 +110,14 @@ public class World {
 					case 37:
 						sprites.add(new Tramp(tilesToPixels(j),
 								tilesToPixels(i), Assets.tramp_Red, this));
+						break;
+					case 39:
+						sprites.add(new Block(tilesToPixels(j),
+								tilesToPixels(i), Assets.block01, this, 1));
+						break;
+					case 40:
+						sprites.add(new Block(tilesToPixels(j),
+								tilesToPixels(i), Assets.block01, this, 2));
 						break;
 					default:
 						if (0 < map[i][j] && map[i][j] < 31) {
@@ -246,8 +255,13 @@ public class World {
 					return null;
 
 				// ブロックがあったら衝突
-				if (map[y][x] == 32 || map[y][x] == 33|| map[y][x] == 38)
+				if (map[y][x] == 32 || map[y][x] == 33 || map[y][x] == 38) {
+					if(sprite instanceof Block) {
+						Block block = (Block) sprite;
+						block.Return();
+					}
 					return new Point(x, y);
+				}
 				if (sprite instanceof Tramp) {
 					tramp_swich = true;
 				}
