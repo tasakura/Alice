@@ -139,9 +139,9 @@ public class GameScreen extends Screen {
 						if (tramp.getState() == 0)
 							tramp.setState(1);
 						// 踏むとプレイヤーは再ジャンプ
-						 alice.setForceJump(true);
-						 alice.jump_half();
-						 break;
+						alice.setForceJump(true);
+						alice.jump_half();
+						break;
 					} else {
 						if (tramp.getState() == 0) {
 							if (alice.getState() == 0)
@@ -162,9 +162,8 @@ public class GameScreen extends Screen {
 					break;
 				} else if (sprite instanceof Block) {
 					Block block = (Block) sprite;
-//					alice.CollisionJudge(block);
-//					alice.setY(block.y-alice.getHeight());
-					break;
+					alice.CollisionJudge(block);
+//					break;
 				}
 			}
 		}
@@ -186,7 +185,7 @@ public class GameScreen extends Screen {
 			}
 		}
 		alice.update();
-		if (alice.getState() == 0)
+		if (alice.getState() == 0||alice.getState() == 1)
 			world.update(deltaTime);
 	}
 
@@ -201,7 +200,8 @@ public class GameScreen extends Screen {
 			case TouchEvent.TOUCH_UP:
 				if (isBounds(event, 70, 160, 380, 100)) {
 					world = new World(game, 1);
-					alice.setAlicePotison();
+					alice = new Alice(world.getPlayer_x(), world.getPlayer_y(),
+							Assets.alices, world);
 					state = GameState.Ready;
 					break;
 				}

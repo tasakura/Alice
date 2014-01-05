@@ -48,7 +48,6 @@ public class World {
 		Settings.mapload(game.getFileIO(), "map" + stage + ".txt");
 		Settings.load(game.getFileIO());
 		load(stage);
-		Log.d("", width+"+"+height);
 		tickTime = 0;
 		world_end = false;
 		timerFlag = true;
@@ -245,21 +244,27 @@ public class World {
 		// 衝突しているか調べる
 		for (int x = fromTileX; x <= toTitleX; x++) {
 			for (int y = fromTileY; y <= toTitleY; y++) {
-
+				if (sprite instanceof Block)
+					return null;
 				// 画面外は衝突
 				if (x < 0 || x >= COL)
 					return new Point(x, y);
-				if (y < 0)
+				
+				if (sprite instanceof Alice) {	// アリスが画面外にブロックに乗って行ったら判定
+					Alice alice = (Alice) sprite;
+					if (alice.isBlock_flag() && alice.y < -alice.height) {
+						alice.setState(1);
+						return null;
+					}
+				}
+				if (y < 0) {
 					return new Point(x, y);
+				}
 				if (y >= ROW)
 					return null;
 
 				// ブロックがあったら衝突
 				if (map[y][x] == 32 || map[y][x] == 33 || map[y][x] == 38) {
-					if(sprite instanceof Block) {
-						Block block = (Block) sprite;
-						block.Return();
-					}
 					return new Point(x, y);
 				}
 				if (sprite instanceof Tramp) {

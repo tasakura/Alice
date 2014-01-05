@@ -4,9 +4,11 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
 
 import android.R.dimen;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.ViewDebug.FlagToString;
 
 public class Alice extends Sprite {
 
@@ -17,6 +19,7 @@ public class Alice extends Sprite {
 
 	private double vx;
 	private double vy;
+	private double block_vy;
 	private double speed; // 移動速度
 
 	private boolean onGround = true;
@@ -35,7 +38,10 @@ public class Alice extends Sprite {
 	private double anim_max_y;
 	private int WorldHeight = 0;
 	private int stock = 3;
-	private boolean block_flag = false;
+	private boolean block_flag = false; // ブロックと接しているか
+	private boolean block_Upflag = false;
+
+	private double newBlockY;
 
 	public Alice(double x, double y, Pixmap pixmap, World world) {
 		super(x, y, pixmap, world);
@@ -151,66 +157,36 @@ public class Alice extends Sprite {
 		}
 	}
 
-//	public void CollisionJudge(Block block) {
-//		// 重力で下向きに速度がかかる
-//		vy += world.getGravity();
-//		// x方向の当たり判定
-//		// 移動先座標を求める
-//		double newX = x + vx;
-//		// 移動先座標で衝突するタイルの位置を取得
-//		// x方向だけ考えるのでｘ座標は変化しないと家庭
-//		Point tile = block.Collision(this, newX, y);
-//		if (tile == null) {
-//			// 衝突するブロックがなければ移動
-//			x = newX;
-//		} else {
-//			// 衝突するタイルがある場合
-//			if (vx > 0) {
-//				// 右へ移動中なので右ブロックと衝突
-//				// ブロックにのめりこむ or　隙間がないように位置調整
-//				x = world.tilesToPixels(tile.x) - width;
-//			} else if (vx < 0) {
-//				// 左へ移動中なので左のブロックと衝突
-//				// 位置調整
-//				x = world.tilesToPixels(tile.x + 1);
-//			}
-//		}
-//
-//		// y方向の当たり判定
-//		double newY = y + vy;
-//		// 移動先座標で衝突するブロックの位置を取得
-//		// y方向だけ考えるのでx座標は変化しないと家庭
-//		tile = world.getTileCollision(this, x, newY);
-//		if (tile == null) {
-//			// 衝突するブロ ックがなければ移動
-//			y = newY;
-//			// 衝突していないということは空中
-//			onGround = false;
-//		} else {
-//			// 衝突するブロックがある場合
-//			if (vy > 0) {
-//				// 下へ移動中なので下のブロックと衝突（着地）
-//				// 位置調整
-//				y = world.tilesToPixels(tile.y) - height;
-//				// 着地したのでy方向速度を0に
-//				vy = 0;
-//				// 着地
-//				onGround = true;
-//			} else if (vy < 0) {
-//				// 上へ移動中なので上のブロックと衝突
-//				// 位置調整
-//				y = world.tilesToPixels(tile.y + 1);
-//				// 天井にぶつかったのでy方向速度を0に
-//				vy = 0;
-//			}
-//		}
-//		block_flag = true;
-//	}
+	public void CollisionJudge(Block block) {
+		if (y < (block.getY() - height / 2)
+				&& (x > block.getX() - width && x < block.getX() + block.width)) {
+			newBlockY = y + block.getVy();
+			block_vy = block.getVy();
+			y = newBlockY;
+			block_flag = true;
+		} else {
+			Point tile = new Point(world.pixelsToTiles(block.x),
+					world.pixelsToTiles(block.y));
+			int adjust = 10;
+			if (x + width < (block.x + adjust) || x > (block.x + 80 - adjust)) {
+				if (x > block.x) {
+					x = world.tilesToPixels(tile.x + 1);
+				} else if (x < block.x) {
+					x = world.tilesToPixels(tile.x) - width;
+				}
+			} else {
+				if (y > (block.y + height - adjust)) {
+					block_Upflag = true;
+				}
+			}
+		}
+	}
 
 	public void update() {
-		if (state == 0 && !block_flag) {
+		if (state == 0) {
 			// 重力で下向きに速度がかかる
-			vy += world.getGravity();
+			if (!block_flag)
+				vy += world.getGravity();
 			// x方向の当たり判定
 			// 移動先座標を求める
 			double newX = x + vx;
@@ -238,14 +214,20 @@ public class Alice extends Sprite {
 			// 移動先座標で衝突するブロックの位置を取得
 			// y方向だけ考えるのでx座標は変化しないと家庭
 			tile = world.getTileCollision(this, x, newY);
-			if (tile == null) {
+			if (tile == null && !block_flag && !block_Upflag) {
 				// 衝突するブロ ックがなければ移動
 				y = newY;
 				// 衝突していないということは空中
 				onGround = false;
 			} else {
-				// 衝突するブロックがある場合
-				if (vy > 0) {
+				if (block_flag) {
+					if (vy < 1)
+						y += vy;
+					onGround = true;
+				} else if (block_Upflag) {
+					y = y+vy;
+					vy = 0;
+				} else if (vy > 0) {// 衝突するブロックがある場合
 					// 下へ移動中なので下のブロックと衝突（着地）
 					// 位置調整
 					y = world.tilesToPixels(tile.y) - height;
@@ -277,6 +259,7 @@ public class Alice extends Sprite {
 			}
 		}
 		block_flag = false;
+		block_Upflag = false;
 	}
 
 	public void draw(Graphics g, int offsetX, int offsetY, float deltaTime) {
@@ -321,6 +304,10 @@ public class Alice extends Sprite {
 
 	public void setUpDown(int vy) {
 		this.y += vy;
+	}
+
+	public boolean isBlock_flag() {
+		return block_flag;
 	}
 
 }
